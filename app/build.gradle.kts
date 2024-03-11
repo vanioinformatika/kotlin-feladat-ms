@@ -19,6 +19,6 @@ dependencies {
     testImplementation("io.mockk:mockk:1.4.1")
 }
 
-tasks.named<Test>("test") {
+tasks.test {
     useJUnitPlatform()
 }
