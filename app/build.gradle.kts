@@ -22,7 +22,8 @@ dependencies {
     implementation("com.vaadin:vaadin-core:24.+")
     implementation("com.vaadin:vaadin-spring-boot-starter:24.+")
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.4.1")
+    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 defaultTasks("clean", "vaadinBuildFrontend", "build")

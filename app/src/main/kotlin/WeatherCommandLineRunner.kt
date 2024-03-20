@@ -26,4 +26,4 @@ class WeatherCommandLineRunner(val weatherService: WeatherService): CommandLineR
 fun WeatherForecasts.println() =
         "Weather forecast daily averages:\n$separator\n${this.weatherDailyForecast
                 .map { wdf -> "${wdf.day} | ${wdf.average()}"}
-                .reduce { first, second -> "${first}\n${second}"}}"
+                .reduce { first, second -> "${first}\n${second}"}}\n"
