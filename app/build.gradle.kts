@@ -17,6 +17,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.4.1")
+    testImplementation("org.mockito:mockito-core:5.11.0")
 }
 
 tasks.test {
