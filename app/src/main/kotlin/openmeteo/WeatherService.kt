@@ -2,7 +2,9 @@ package hu.vanio.kotlin.feladat.ms.openmeteo
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import hu.vanio.kotlin.feladat.ms.WeatherAppConfig
+import hu.vanio.kotlin.feladat.ms.exception.ServiceUnavailable
 import org.springframework.stereotype.Service
+import java.io.IOException
 
 import java.net.URI
 import java.net.http.HttpClient
@@ -13,14 +15,18 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class WeatherService(var config: WeatherAppConfig, var objectMapper: ObjectMapper) {
+    private val id = "WEATHER_SERVICE"
+
     fun getWeatherStatistics(): WeatherForecasts {
         val request = HttpRequest.newBuilder()
                 .uri(URI(config.appUrl))
                 .GET()
                 .build()
-
-        val weatherForecast = objectMapper.readValue(HttpClient.newHttpClient()
+        val weatherForecast = try {objectMapper.readValue(HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString()).body(), WeatherForecast::class.java)
+        } catch (e: IOException) {
+            throw ServiceUnavailable(id)
+        }
         return statistics(weatherForecast)
     }
 
