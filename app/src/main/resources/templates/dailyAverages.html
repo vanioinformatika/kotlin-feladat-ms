@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Daily Temperature Averages</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<p class="error" th:if="${error}">The weather service is currently unavailable.</p>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Daily temperature average (&deg;C)</th>
+    </tr>
+    <tr th:each="dailyAverage : ${dailyAverages}">
+        <td th:text="${dailyAverage.key}"></td>
+        <td th:text="${dailyAverage.value}"></td>
+    </tr>
+</table>
+</body>
+</html>

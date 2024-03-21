@@ -1,0 +1,4 @@
+weather:
+  api:
+    url: https://api.open-meteo.com/v1/
+forecast-url: ${weather.api.url}/forecast?latitude=47.4984&longitude=19.0404&hourly=temperature_2m&timezone=auto
