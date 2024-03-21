@@ -14,9 +14,14 @@ class WeatherResponseParser {
 
     @Throws(IllegalArgumentException::class)
     fun groupToWeekData(hourlyData: HourlyData): WeeklyTempData {
-        val dailyTempDataList = mutableListOf<DailyTempData>()
         val (time, temp) = validateData(hourlyData)
+        val dailyTempData = groupByDays(time, temp)
 
+        return weeklyTempData(dailyTempData)
+    }
+
+    private fun groupByDays(time: List<String>, temp: List<Double>): List<DailyTempData> {
+        val dailyTempDataList = mutableListOf<DailyTempData>()
         val days = time.map { LocalDate.parse(it.substring(0, 10)) }.distinct()
         for (day in days) {
             val hourlyTempsForDay = time.zip(temp)
@@ -26,8 +31,7 @@ class WeatherResponseParser {
 
             dailyTempDataList.add(DailyTempData(day, hourlyTempsForDay))
         }
-
-        return weeklyTempData(dailyTempDataList)
+        return dailyTempDataList
     }
 
     private fun validateData(hourlyData: HourlyData): Pair<List<String>, List<Double>> {
@@ -45,7 +49,7 @@ class WeatherResponseParser {
         return time to temp
     }
 
-    private fun weeklyTempData(dailyTempDataList: MutableList<DailyTempData>): WeeklyTempData {
+    private fun weeklyTempData(dailyTempDataList: List<DailyTempData>): WeeklyTempData {
         val from = dailyTempDataList.first().date
         val to = dailyTempDataList.last().date
         return WeeklyTempData(from, to, dailyTempDataList)
