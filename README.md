@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/dobrosi/kotlin-feladat-ms/graph/badge.svg?token=Bv0alq4qqQ)](https://codecov.io/gh/dobrosi/kotlin-feladat-ms)
 # Kotlin oktatáshoz házifeladat
 
 ## Készíteni kell egy nagyon egyszerű alkalmazást / programot, az alábbi funkcionalitással
