@@ -1,3 +1,5 @@
+[![build](https://github.com/dobrosi/kotlin-feladat-ms/actions/workflows/ci.yml/badge.svg)](https://github.com/dobrosi/kotlin-feladat-ms/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/dobrosi/kotlin-feladat-ms/graph/badge.svg?token=Bv0alq4qqQ)](https://codecov.io/gh/dobrosi/kotlin-feladat-ms)
 # Kotlin oktatáshoz házifeladat
 
 ## Készíteni kell egy nagyon egyszerű alkalmazást / programot, az alábbi funkcionalitással
