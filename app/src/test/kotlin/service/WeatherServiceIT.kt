@@ -54,7 +54,7 @@ class WeatherServiceIT {
     @Test
     fun `test get weekly temp data`() {
         runBlocking {
-            val weeklyTempData = weatherService.getWeeklyTempData()
+            val weeklyTempData = weatherService.getDailyTempData()
             assertNotNull(weeklyTempData)
         }
     }
@@ -62,7 +62,7 @@ class WeatherServiceIT {
     @Test
     fun `test get daily average temp for one week`() {
         runBlocking {
-            val dailyAverageTempForOneWeek = weatherService.getDailyAverageTempForOneWeek()
+            val dailyAverageTempForOneWeek = weatherService.getDailyAverageTemp()
             assertNotNull(dailyAverageTempForOneWeek)
             assertEquals(LocalDate.parse("2024-03-20"), dailyAverageTempForOneWeek[0].date)
             assertEquals(7.137499999999999, dailyAverageTempForOneWeek[0].average_temp)

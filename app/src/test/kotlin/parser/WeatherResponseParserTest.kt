@@ -2,7 +2,7 @@ package parser
 
 import hu.vanio.kotlin.feladat.ms.data.DailyTempData
 import hu.vanio.kotlin.feladat.ms.data.HourlyData
-import hu.vanio.kotlin.feladat.ms.data.WeeklyTempData
+import hu.vanio.kotlin.feladat.ms.data.DailyTempDataContainer
 import hu.vanio.kotlin.feladat.ms.parser.WeatherResponseParser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -13,56 +13,56 @@ class WeatherResponseParserTest {
     private val parser = WeatherResponseParser()
 
     @Test
-    fun `test groupToWeekData with null hourly time`() {
+    fun `test groupToDailyData with null hourly time`() {
         val hourlyData = HourlyData(null, temp())
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            parser.groupToWeekData(hourlyData)
+            parser.groupToDailyData(hourlyData)
         }
 
         assertEquals("No time data available", exception.message)
     }
 
     @Test
-    fun `test groupToWeekData with null hourly temp`() {
+    fun `test groupToDailyData with null hourly temp`() {
         val hourlyData = HourlyData(time(), null)
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            parser.groupToWeekData(hourlyData)
+            parser.groupToDailyData(hourlyData)
         }
 
         assertEquals("No temp data available", exception.message)
     }
 
     @Test
-    fun `test groupToWeekData when time data is empty`() {
+    fun `test groupToDailyData when time data is empty`() {
         val hourlyData = HourlyData(emptyList(), temp())
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            parser.groupToWeekData(hourlyData)
+            parser.groupToDailyData(hourlyData)
         }
 
         assertEquals("No time data available", exception.message)
     }
 
     @Test
-    fun `test groupToWeekData when temp data is empty`() {
+    fun `test groupToDailyData when temp data is empty`() {
         val hourlyData = HourlyData(time(), emptyList())
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            parser.groupToWeekData(hourlyData)
+            parser.groupToDailyData(hourlyData)
         }
 
         assertEquals("No temp data available", exception.message)
     }
 
     @Test
-    fun `test groupToWeekData with valid data`() {
+    fun `test groupToDailyData with valid data`() {
         val hourlyData = HourlyData(time(), temp())
 
-        val result = parser.groupToWeekData(hourlyData)
+        val result = parser.groupToDailyData(hourlyData)
 
-        assertEquals(WeeklyTempData::class.java, result.javaClass)
+        assertEquals(DailyTempDataContainer::class.java, result.javaClass)
         assertEquals(LocalDate.parse("2024-03-19"), result.from)
         assertEquals(LocalDate.parse("2024-03-20"), result.to)
         assertEquals(2, result.dailyTempData.size)

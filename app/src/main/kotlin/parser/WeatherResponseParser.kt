@@ -2,7 +2,7 @@ package hu.vanio.kotlin.feladat.ms.parser
 
 import hu.vanio.kotlin.feladat.ms.data.DailyTempData
 import hu.vanio.kotlin.feladat.ms.data.HourlyData
-import hu.vanio.kotlin.feladat.ms.data.WeeklyTempData
+import hu.vanio.kotlin.feladat.ms.data.DailyTempDataContainer
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,11 +13,11 @@ import java.time.format.DateTimeFormatter
 class WeatherResponseParser {
 
     @Throws(IllegalArgumentException::class)
-    fun groupToWeekData(hourlyData: HourlyData): WeeklyTempData {
+    fun groupToDailyData(hourlyData: HourlyData): DailyTempDataContainer {
         val (time, temp) = validateData(hourlyData)
         val dailyTempData = groupByDays(time, temp)
 
-        return weeklyTempData(dailyTempData)
+        return dailyTempDataContainer(dailyTempData)
     }
 
     private fun groupByDays(time: List<String>, temp: List<Double>): List<DailyTempData> {
@@ -49,10 +49,10 @@ class WeatherResponseParser {
         return time to temp
     }
 
-    private fun weeklyTempData(dailyTempDataList: List<DailyTempData>): WeeklyTempData {
+    private fun dailyTempDataContainer(dailyTempDataList: List<DailyTempData>): DailyTempDataContainer {
         val from = dailyTempDataList.first().date
         val to = dailyTempDataList.last().date
-        return WeeklyTempData(from, to, dailyTempDataList)
+        return DailyTempDataContainer(from, to, dailyTempDataList)
     }
 
     private fun String.toDate(): LocalDate {

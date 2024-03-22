@@ -1,7 +1,7 @@
 package hu.vanio.kotlin.feladat.ms.controller
 
 import hu.vanio.kotlin.feladat.ms.data.DailyAverageData
-import hu.vanio.kotlin.feladat.ms.data.WeeklyTempData
+import hu.vanio.kotlin.feladat.ms.data.DailyTempDataContainer
 import hu.vanio.kotlin.feladat.ms.service.WeatherService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class WeatherController(private val weatherService: WeatherService) {
     @GetMapping("/weather")
-    suspend fun getWeeklyTempData(): ResponseEntity<WeeklyTempData> {
-        return ResponseEntity.ok(weatherService.getWeeklyTempData())
+    suspend fun getWeeklyTempData(): ResponseEntity<DailyTempDataContainer> {
+        return ResponseEntity.ok(weatherService.getDailyTempData())
     }
 
     @GetMapping("/average")
     suspend fun getAverageTemps(): ResponseEntity<List<DailyAverageData>> {
-        return ResponseEntity.ok(weatherService.getDailyAverageTempForOneWeek())
+        return ResponseEntity.ok(weatherService.getDailyAverageTemp())
     }
 
     @ExceptionHandler(IllegalArgumentException::class)

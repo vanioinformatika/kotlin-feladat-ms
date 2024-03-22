@@ -1,7 +1,7 @@
 package hu.vanio.kotlin.feladat.ms.service
 
 import hu.vanio.kotlin.feladat.ms.data.DailyAverageData
-import hu.vanio.kotlin.feladat.ms.data.WeeklyTempData
+import hu.vanio.kotlin.feladat.ms.data.DailyTempDataContainer
 import hu.vanio.kotlin.feladat.ms.httpclient.WeatherFeignClient
 import hu.vanio.kotlin.feladat.ms.parser.WeatherResponseParser
 import kotlinx.coroutines.Dispatchers
@@ -15,17 +15,17 @@ class WeatherService(
     private val tempCalculator: TempCalculator
 ) {
     @Throws(IllegalArgumentException::class)
-    suspend fun getWeeklyTempData(): WeeklyTempData {
+    suspend fun getDailyTempData(): DailyTempDataContainer {
         val response = withContext(Dispatchers.IO) {
             weatherFeignClient.getWeather()
         }
-        return weatherResponseParser.groupToWeekData(response.hourly)
+        return weatherResponseParser.groupToDailyData(response.hourly)
     }
 
     @Throws(IllegalStateException::class)
-    suspend fun getDailyAverageTempForOneWeek(): List<DailyAverageData> {
+    suspend fun getDailyAverageTemp(): List<DailyAverageData> {
         val dailyAverageTempList = mutableListOf<DailyAverageData>()
-        val weeklyTempData = getWeeklyTempData()
+        val weeklyTempData = getDailyTempData()
         for (dailyTempData in weeklyTempData.dailyTempData) {
             val average = tempCalculator.getAverageDailyTemp(dailyTempData);
             dailyAverageTempList.add(DailyAverageData(dailyTempData.date, average))
