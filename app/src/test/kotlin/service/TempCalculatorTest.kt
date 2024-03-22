@@ -1,14 +1,14 @@
 package service
 
 import hu.vanio.kotlin.feladat.ms.data.DailyTempData
-import hu.vanio.kotlin.feladat.ms.service.AverageDailyTempCalculator
+import hu.vanio.kotlin.feladat.ms.service.TempCalculator
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalTime
 
-class AverageDailyTempCalculatorTest {
-    private val calculator = AverageDailyTempCalculator()
+class TempCalculatorTest {
+    private val calculator = TempCalculator()
 
     @Test
     fun `test getAverage`() {
@@ -16,7 +16,7 @@ class AverageDailyTempCalculatorTest {
 
         val expectedAverage = (10.0 + 15.0 + 20.0) / 3
 
-        val result = calculator.getAverageTemp(dailyTempData)
+        val result = calculator.getAverageDailyTemp(dailyTempData)
 
         assertEquals(expectedAverage, result)
     }
@@ -29,7 +29,7 @@ class AverageDailyTempCalculatorTest {
         )
 
         val exception = assertThrows(IllegalArgumentException::class.java) {
-            calculator.getAverageTemp(dailyTempData)
+            calculator.getAverageDailyTemp(dailyTempData)
         }
 
         assertEquals("Hourly temperature data for 2024-03-19 is empty.", exception.message)

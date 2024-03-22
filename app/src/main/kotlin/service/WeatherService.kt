@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class WeatherService(
     private val weatherFeignClient: WeatherFeignClient,
     private val weatherResponseParser: WeatherResponseParser,
-    private val averageDailyTempCalculator: AverageDailyTempCalculator
+    private val tempCalculator: TempCalculator
 ) {
     @Throws(IllegalArgumentException::class)
     suspend fun getWeeklyTempData(): WeeklyTempData {
@@ -27,7 +27,7 @@ class WeatherService(
         val dailyAverageTempList = mutableListOf<DailyAverageData>()
         val weeklyTempData = getWeeklyTempData()
         for (dailyTempData in weeklyTempData.dailyTempData) {
-            val average = averageDailyTempCalculator.getAverageTemp(dailyTempData);
+            val average = tempCalculator.getAverageDailyTemp(dailyTempData);
             dailyAverageTempList.add(DailyAverageData(dailyTempData.date, average))
         }
         return dailyAverageTempList

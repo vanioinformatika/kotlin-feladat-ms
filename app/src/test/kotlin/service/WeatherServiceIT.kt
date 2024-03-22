@@ -27,7 +27,7 @@ import kotlin.test.assertNotNull
 @Import(
     WeatherService::class,
     WeatherResponseParser::class,
-    AverageDailyTempCalculator::class
+    TempCalculator::class
 )
 class WeatherServiceIT {
     companion object {
