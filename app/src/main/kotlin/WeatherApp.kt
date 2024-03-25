@@ -1,12 +1,55 @@
 package hu.vanio.kotlin.feladat.ms
 
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
 @SpringBootApplication
-class WeatherApp
+class WeatherApp {
+    fun calculateAvgTemp(getUrl: String): MutableMap<Int, Double> {
+        val client = HttpClient.newBuilder().build();
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(getUrl))
+            .build();
+
+        val response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw DataUnavailableException("Weather datas are unavailable! Response was: " + response.body())
+        }
+        val mapper = jacksonObjectMapper()
+        mapper.registerModule(JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        val weatherData: WeatherData = mapper.readValue(response.body())
+        val times = weatherData.hourly.time.toList()
+        val temperatures = weatherData.hourly.temperature_2m.toList()
+        val dayWithTemperatures = mutableListOf<DayWithTemperature>()
+        for (i in times.indices) {
+            dayWithTemperatures.add(DayWithTemperature(times[i].dayOfMonth, temperatures[i].toDouble()))
+        }
+
+        val daysWithTemperaturesMap = mutableMapOf<Int, Double>()
+        dayWithTemperatures.forEach {
+            if (!daysWithTemperaturesMap.containsKey(it.day)) {
+                daysWithTemperaturesMap[it.day] = it.temp
+            } else {
+                daysWithTemperaturesMap[it.day] = daysWithTemperaturesMap[it.day]!! + it.temp
+            }
+        }
+        return daysWithTemperaturesMap
+    }
+}
 
 fun main() {
-    runApplication<WeatherApp>()
+    val weatherApp = WeatherApp()
+    weatherApp.calculateAvgTemp("https://api.open-meteo.com/v1/forecast?latitude=47.4984&longitude=19.0404&hourly=temperature_2m&timezone=auto").forEach {
+        println("${it.key}: ${it.value/24}")
+    }
 }
 
